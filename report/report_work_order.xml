@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+    <template id="report_work_order_card">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td colspan="4">
+                                        <span t-field="o.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Team Name
+                                    </td>
+                                    <td>
+                                        <span t-field="o.team_id"/>
+                                    </td>
+                                    <td>
+                                        Customer
+                                    </td>
+                                    <td>
+                                        <span t-field="o.sale_order_id.partner_id"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Booking Order Ref
+                                    </td>
+                                    <td>
+                                        <span t-field="o.sale_order_id"/>
+                                    </td>
+                                    <td>
+                                        Date
+                                    </td>
+                                    <td>
+                                        <span t-field="o.date_start"/>
+                                         - 
+                                        <span t-field="o.date_end"/>
+                                    </td>
+                                </tr>
+                                <tr height="150px">
+                                    <td colspan="4">
+                                        Notes:<br/>
+                                        <span t-field="o.notes"/>
+                                    </td>
+                                </tr>
+                                <tr height="150px">
+                                    <td colspan="4">
+                                        Signature:<br/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+    
+
+</odoo>

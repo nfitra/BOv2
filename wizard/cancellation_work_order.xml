@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <!-- cancellation.work.order form view -->
+     <record id="cancellation_work_order_view_form" model="ir.ui.view">
+        <field name="name">Reason For Cancellation</field>
+        <field name="model">cancellation.work.order.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reason For Cancellation">
+                <sheet>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                    <footer>
+                        <button string="Confirm" name="action_cancel" class="btn-primary" type="object" />
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

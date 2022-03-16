@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+    <!-- sale.work.order tree view -->
+    <record id="sale_work_order_view_tree" model="ir.ui.view">
+        <field name="name">Work Order</field>
+        <field name="model">sale.work.order</field>
+        <field name="arch" type="xml">
+            <tree string="Work Order Tree">
+                <!-- Add your fields here -->
+                <field name="name" />
+                <field name="sale_order_id" />
+                <field name="team_id" />
+                <field name="team_leader_id" />
+                <field name="planned_start" />
+                <field name="planned_end" />
+                <field name="date_start" />
+                <field name="date_end" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- sale.work.order kanban view -->
+    <record id="sale_work_order_view_kanban" model="ir.ui.view">
+        <field name="name">Work Order</field>
+        <field name="model">sale.work.order</field>
+        <field name="arch" type="xml">
+            <kanban string="Work Order Kanban">
+                <field name="name" />
+                <field name="sale_order_id" />
+                <field name="team_id" />
+                <field name="team_leader_id" />
+                <field name="planned_start" />
+                <field name="planned_end" />
+                <field name="date_start" />
+                <field name="date_end" />
+                <field name="state" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div>
+                            <h1>
+                                <field name="name" />
+                            </h1>
+                            <ul>
+                                <li>
+                                    Sale Order Ref:
+                                    <field name="sale_order_id" />
+                                </li>
+                                <li>
+                                    Team ID:
+                                    <field name="team_id" />
+                                </li>
+                                <li>
+                                    Planned Start:
+                                    <field name="planned_start" />
+                                </li>
+                                <li>
+                                    Planned End:
+                                    <field name="planned_end" />
+                                </li>
+                                <li>
+                                    State:
+                                    <field name="state" />
+                                </li>
+                            </ul>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- sale.work.order calendar view -->
+    <record id="sale_work_order_view_calendar" model="ir.ui.view">
+        <field name="name">Work Order</field>
+        <field name="model">sale.work.order</field>
+        <field name="arch" type="xml">
+            <calendar string="Work Order Calendar" date_start="planned_start" date_stop="planned_end" color="name">
+                <!-- Add your fields here -->
+                <field name="name" />
+                <field name="sale_order_id" />
+            </calendar>
+        </field>
+    </record>
+
+    <!-- sale.work.order pivot view -->
+    <record id="sale_work_order_view_pivot" model="ir.ui.view">
+        <field name="name">Work Order</field>
+        <field name="model">sale.work.order</field>
+        <field name="arch" type="xml">
+            <pivot string="Work Order Pivot">
+                <!-- Add your fields here -->
+                <field name="team_id" type='row' />
+                <field name="planned_start" type='col' />
+            </pivot>
+        </field>
+    </record>
+
+    <!-- sale.work.order graph view -->
+    <record id="sale_work_order_view_graph" model="ir.ui.view">
+        <field name="name">Work Order</field>
+        <field name="model">sale.work.order</field>
+        <field name="arch" type="xml">
+            <graph string="Work Order Graph" type='pie'>
+                <!-- Add your fields here -->
+                <field name="team_id" />
+            </graph>
+        </field>
+    </record>
+
+    <!-- sale.work.order form view -->
+    <record id="sale_work_order_view_form" model="ir.ui.view">
+        <field name="name">Work Order</field>
+        <field name="model">sale.work.order</field>
+        <field name="arch" type="xml">
+            <form string="Test">
+                <header attrs="{'invisible':[('name','=','New')]}">
+                    <button string="Start Work" name="action_start_work" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','pending')]}" />
+                    <button string="End Work" name="action_end_work" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','inprogress')]}" />
+                    <button string="Reset" name="action_reset" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','inprogress')]}" />
+                    <button string="Cancel" name="popup_cancellation" type="object" class="btn-secondary" attrs="{'invisible':[('state','=','cancelled')]}" />
+
+                    <field name="state" widget="statusbar" statusbar_visible="pending,inprogress,done,cancelled" />
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name" readonly="1" />
+                    </h1>
+                    <group>
+                        <field name="sale_order_id" domain="[('is_booking_order', '=', True)]" />
+                    </group>
+                    <group>
+                        <group string="Service Team">
+                            <field name="team_id" />
+                            <field name="team_leader_id" />
+                            <field name="team_member_ids" widget="many2many_tags" />
+                        </group>
+                        <group string="Date and Time">
+                            <field name="planned_start" widget="datetime"/>
+                            <field name="planned_end" widget="datetime"/>
+                            <field name="date_start" widget="datetime"/>
+                            <field name="date_end" widget="datetime"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- sale.work.order action window -->
+    <record id="sale_work_order_action" model="ir.actions.act_window">
+        <field name="name">Work Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.work.order</field>
+        <field name="view_mode">tree,kanban,calendar,pivot,graph,form</field>
+    </record>
+
+    <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="working_order_menu_act" name="Work Order" parent="booking_menu_categ" action="sale_work_order_action" sequence="30" />
+</odoo>
