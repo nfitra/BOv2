@@ -128,7 +128,7 @@
                         <field name="name" readonly="1" />
                     </h1>
                     <group>
-                        <field name="sale_order_id" domain="[('is_booking_order', '=', True)]" />
+                        <field name="sale_order_id" />
                     </group>
                     <group>
                         <group string="Service Team">

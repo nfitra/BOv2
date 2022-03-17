@@ -7,7 +7,6 @@ class WorkOrder(models.Model):
 
     name = fields.Char(string='WO Number', readonly=True, default='New', required=True, copy=False)
     sale_order_id = fields.Many2one(comodel_name='sale.order', string='Booking Order Ref')
-    is_booking_order = fields.Many2one(comodel_name='sale.order.is_booking_order', string='Booking Order Ref')
 
     team_id = fields.Many2one(comodel_name='service.team', string='Service Team', required=True)
     team_leader_id = fields.Many2one(comodel_name='res.users', string='Service Team Leader', required=True)
@@ -25,9 +24,9 @@ class WorkOrder(models.Model):
     def onchange_planned_start(self):
         for record in self:
             record.planned_end = record.planned_start + relativedelta(days=1)
-            
+
     planned_end = fields.Datetime(string='Planned End', default=fields.datetime.now() + relativedelta(days=1), required=True)
-    
+
     @api.onchange('planned_end')
     def onchange_planned_end(self):
         for record in self:
@@ -35,8 +34,8 @@ class WorkOrder(models.Model):
 
     date_start = fields.Datetime(string='Date Start', readonly=True)
     date_end = fields.Datetime(string='Date End', readonly=True)
-    state = fields.Selection(string='Status', selection=[('pending', 'Pending'), ('inprogress', 'In Progress'), (
-        'done', 'Done'), ('cancelled', 'Cancelled')], readonly=True, default='pending', required=True)
+    state = fields.Selection(string='Status', selection=[('pending', 'Pending'), ('inprogress', 'In Progress'), ('done', 'Done'), ('cancelled', 'Cancelled')], readonly=True, default='pending', required=True)
+    notes = fields.Text(string='Notes')
 
     def action_start_work(self):
         for record in self:
@@ -64,10 +63,8 @@ class WorkOrder(models.Model):
             'target': 'new'
         }
 
-    notes = fields.Text(string='Notes')
-    
     @api.model
     def create(self, vals):
-        if vals.get('name') == 'New':
-            vals['name'] = self.env['ir_sequence'].next_by_code('seq_work_order')
+        # if vals.get('name', 'New') == 'New':
+        vals['name'] = self.env['ir.sequence'].next_by_code('sale.work.order') or 'New'
         return super(WorkOrder, self).create(vals)

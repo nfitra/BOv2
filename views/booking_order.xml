@@ -14,6 +14,11 @@
                 <field name="is_booking_order" />
             </xpath>
 
+            <xpath expr="//button[@name='action_view_invoice']" position="after">
+                <button string="Work Order" name="action_workorder" icon="fa-clock-o" type="object" class="oe_stat_button" attrs="{'invisible': [('state', '!=', 'sale')]}"/>
+            </xpath>
+
+
             <notebook position="inside">
                 <page string="Booking Order" attrs="{'invisible': [('is_booking_order','=', False)]}">
                     <group>

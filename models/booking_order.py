@@ -29,7 +29,17 @@ class BookingOrder(models.Model):
     def onchange_booking_end(self):
         for record in self:
             record.booking_start = record.booking_end - relativedelta(days=1)
-            
+
+    def action_workorder(self):
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "sale.work.order",
+            "domain": [('sale_order_id', '=', self.id)],
+            "context": {"create": False},
+            "name": "Work Order for %s" %self.name,
+            'view_mode': 'tree,form',
+        }
+
     def action_check(self):
         res = self.env['sale.work.order'].search([
                                                 ('team_id.id','=', self.service_team_id.id),
@@ -53,7 +63,7 @@ class BookingOrder(models.Model):
             'target': 'new',
             'context': {'default_message': message}
         }
-        
+
     def action_confirm(self):
         res = self.env['sale.work.order'].search([
                                                 ('team_id.id','=', self.service_team_id.id),
@@ -76,10 +86,11 @@ class BookingOrder(models.Model):
                     }
         
         else:
-            # self.env['sale.work.order'].search([])
-            self.env['sale.work.order'].browse([])
             vals = {
-                'notes': 'TEST123'
+                'sale_order_id': self.id,
+                'team_id': self.service_team_id.id,
+                'team_leader_id': self.team_leader_id.id,
+                'team_member_ids': self.team_member_ids
             }
             self.env['sale.work.order'].create(vals)
             return super(BookingOrder, self).action_confirm()
